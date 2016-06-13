@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slate Example Configuration</title>
+    <link rel='stylesheet' type='text/css' href='css/slate.min.css'>
+    <script src='js/slate.min.js'></script>
+    <style>
+        .title {
+            padding: 15px 10px;
+            text-transform: uppercase;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #888888;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<h1 class='title'>Mighty 100 Configuration</h1>
+
+<div class='item-container'>
+    <div class='item-container-content'>
+        <div class='item'>
+            Here you can choose language of your word cards
+        </div>
+    </div>
+</div>
+
+<div class="item-container">
+    <div class="item-container-header">Choose language</div>
+    <div class="item-container-content">
+        <label class="item">
+            French-English
+            <input type="radio" class="item-radio" name="dict-radio" value="1">
+        </label>
+        <label class="item">
+            Spanish-English
+            <input type="radio" class="item-radio" name="dict-radio" value="2">
+        </label>
+    </div>
+</div>
+
+<div class='item-container'>
+    <div class='button-container'>
+        <input id='submit_button' type='button' class='item-button' value='SAVE'>
+    </div>
+</div>
+</body>
+<script>
+    function getConfigData() {
+        var langRadios = document.getElementsByName('dict-radio');
+        var lang_value;
+        for(var i = 0; i < langRadios.length; i++){
+            if(langRadios[i].checked){
+                lang_value = langRadios[i].value;
+            }
+        }
+
+        var options = {
+            'language_dict': lang_value
+        };
+        // Save for next launch
+        localStorage['language_dict'] = options['language_dict'];
+        console.log('Got options: ' + JSON.stringify(options));
+        return options;
+    }
+    function getQueryParam(variable, defaultValue) {
+        var query = location.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (pair[0] === variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        return defaultValue || false;
+    }
+
+    var submitButton = document.getElementById('submit_button');
+    submitButton.addEventListener('click', function() {
+        console.log('Submit');
+        // Set the return URL depending on the runtime environment
+        var return_to = getQueryParam('return_to', 'pebblejs://close#');
+        document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
+    });
+    (function() {
+        // Load any previously saved configuration, if available
+        if(localStorage['language_dict']) {
+            var langRadios = document.getElementsByName('dict-radio');
+            for(var i = 0; i < langRadios.length; i++){
+                if(langRadios[i].value == localStorage['language_dict'] ){
+                    langRadios[i].checked = true;
+                }
+            }
+        }
+    })();
+</script>
+</html>
