@@ -33,11 +33,11 @@
     <div class="item-container-content">
         <label class="item">
             French-English
-            <input type="radio" class="item-radio" name="dict-radio" value="1">
+            <input type="radio" class="item-radio" name="dict-radio" value="french">
         </label>
         <label class="item">
             Spanish-English
-            <input type="radio" class="item-radio" name="dict-radio" value="2">
+            <input type="radio" class="item-radio" name="dict-radio" value="spanish">
         </label>
     </div>
 </div>
@@ -49,6 +49,17 @@
 </div>
 </body>
 <script>
+    function getCode(dictLanguage){
+        var code = 1;
+        if(dictLanguage == "french"){
+            code = 1;
+        }else if(dictLanguage == "spanish"){
+            code = 2;
+        }
+
+        return code;
+    }
+
     function getConfigData() {
         var langRadios = document.getElementsByName('dict-radio');
         var lang_value;
@@ -59,7 +70,7 @@
         }
 
         var options = {
-            'language_dict': parseInt(lang_value)
+            'language_dict': getCode(lang_value)
         };
         // Save for next launch
         localStorage['language_dict'] = options['language_dict'];
@@ -87,7 +98,9 @@
     });
     (function() {
         // Load any previously saved configuration, if available
-        if(localStorage['language_dict']) {
+        var storedVal = localStorage['language_dict'];
+        storedVal = storedVal ? storedVal : "french";
+        if(storedVal) {
             var langRadios = document.getElementsByName('dict-radio');
             for(var i = 0; i < langRadios.length; i++){
                 if(langRadios[i].value == localStorage['language_dict'] ){
