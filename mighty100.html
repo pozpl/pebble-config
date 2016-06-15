@@ -73,7 +73,7 @@
             'language_dict': getCode(lang_value)
         };
         // Save for next launch
-        localStorage['language_dict'] = options['language_dict'];
+        localStorage['language_dict'] = lang_value;
         console.log('Got options: ' + JSON.stringify(options));
         return options;
     }
